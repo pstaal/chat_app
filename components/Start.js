@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
 
   title: {
     fontSize: 45,
-    fontWeight: 600,
+    fontWeight: "600",
     color: '#fff',
     alignSelf: 'center',
   },
@@ -45,9 +45,9 @@ const styles = StyleSheet.create({
     padding: 5,
     fontSize: 16,
     height: 40,
-    fontWeight: 300,
+    fontWeight: "300",
     color: '#757083',
-    opacity: '50%',
+    opacity: 50,
     borderWidth: 2,
     borderColor: '#757083',
     display: 'flex',
@@ -56,13 +56,12 @@ const styles = StyleSheet.create({
   },
   textInput: {
     fontSize: 16,
-    fontWeight: 300,
+    fontWeight: "300",
     height: 30,
     color: '#757083',
-    opacity: '50%',
-    border: 'none',
+    opacity: 50,
+    borderWidth: 0,
     flex: 1,
-    outlineStyle: 'none',
   },
   backGroundView: {
     width: '88%',
@@ -71,9 +70,9 @@ const styles = StyleSheet.create({
   backgroundText: {
     justifyContent: 'flex-start',
     fontSize: 16,
-    fontWeight: 300,
+    fontWeight: "300",
     color: '#757083',
-    opacity: '100%',
+    opacity: 100,
   },
   boxHolder: {
     display: 'flex',
@@ -116,10 +115,9 @@ const styles = StyleSheet.create({
    color: '#B9C6AE',
   },
   active: {
-    outlineColor: 'inherit',
-    outlineStyle: 'solid',
-    outLineWidth: 2,
-    outLineOffset: 2,
+    borderColor: 'red',
+    borderStyle: 'solid',
+    borderWidth: 2,
   },
   button: {
     backgroundColor: '#757083',
@@ -132,7 +130,7 @@ const styles = StyleSheet.create({
   textButton: {
     color: '#fff',
     fontSize: 16,
-    fontWeight: 300,
+    fontWeight: "300",
   }
 });
 
