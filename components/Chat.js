@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Platform, KeyboardAvoidingView, StyleSheet } from 'react-native';
 import { GiftedChat } from 'react-native-gifted-chat'
 
 
@@ -34,8 +34,14 @@ export default class Chat extends React.Component {
             name: 'React Native',
             avatar: 'https://placeimg.com/140/140/any',
           },
-        },
-      ],
+         },
+         {
+          _id: 2,
+          text: 'This is a system message',
+          createdAt: new Date(),
+          system: true,
+         },
+      ]
     });
   }
 
@@ -51,6 +57,7 @@ export default class Chat extends React.Component {
           onSend={messages => this.onSend(messages)}
           user={{_id: 1,}}
         />
+        { Platform.OS === 'android' ? <KeyboardAvoidingView behavior="height" /> : null}
       </View>
     )
   }
