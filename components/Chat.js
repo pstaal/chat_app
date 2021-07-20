@@ -41,13 +41,13 @@ export default class Chat extends React.Component {
       messages: [
         {
           _id: 1,
-          text: `Welcome ${name}! You have entered the chat.`,
+          text: `${name}! has just entered the chat.`,
           createdAt: new Date(),
           system: true,
          },
         {
           _id: 2,
-          text: 'Hello developer',
+          text: `Hello ${name}!`,
           createdAt: new Date(),
           user: {
             _id: 2,
