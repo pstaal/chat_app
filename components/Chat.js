@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Platform, KeyboardAvoidingView, StyleSheet } from 'react-native';
-import { GiftedChat } from 'react-native-gifted-chat'
+import { GiftedChat, Bubble } from 'react-native-gifted-chat'
 
 
 const styles = StyleSheet.create({
@@ -36,10 +36,17 @@ export default class Chat extends React.Component {
   }
 
   componentDidMount() {
+    let name = this.props.route.params.name;
     this.setState({
       messages: [
         {
           _id: 1,
+          text: `Welcome ${name}! You have entered the chat.`,
+          createdAt: new Date(),
+          system: true,
+         },
+        {
+          _id: 2,
           text: 'Hello developer',
           createdAt: new Date(),
           user: {
@@ -47,12 +54,6 @@ export default class Chat extends React.Component {
             name: 'React Native',
             avatar: 'https://placeimg.com/140/140/any',
           },
-         },
-         {
-          _id: 2,
-          text: 'This is a system message',
-          createdAt: new Date(),
-          system: true,
          },
       ]
     });
