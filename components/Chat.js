@@ -16,7 +16,7 @@ export default class Chat extends React.Component {
     this.props.navigation.setOptions({ title: name });
   };
 
-  render() {}
+  render() {
     
     let color = this.props.route.params.color;
   
@@ -28,4 +28,4 @@ export default class Chat extends React.Component {
     )
   }
 
-}
+};
