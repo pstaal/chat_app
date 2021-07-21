@@ -12,12 +12,14 @@ const styles = StyleSheet.create({
 export default class Chat extends React.Component {
 
   componentDidMount() {
+    let name = this.props.route.params.name;
     this.props.navigation.setOptions({ title: name });
   };
-  
-  render() {
-    let name = this.props.route.params.name;
+
+  render() {}
+    
     let color = this.props.route.params.color;
+  
 
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: color }}>
@@ -25,4 +27,5 @@ export default class Chat extends React.Component {
       </View>
     )
   }
+
 }
