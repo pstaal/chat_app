@@ -143,7 +143,7 @@ export default class Start extends React.Component {
 
   render() {
     return (
-      <ImageBackground source={require('../assets/Background Image.png')} resizeMode="cover" style={styles.backGroundImage}>
+      <ImageBackground source={require('../assets/Background-Image.png')} resizeMode="cover" style={styles.backGroundImage}>
       <View style={styles.mainView}>
         <Text style={styles.title}>App Title</Text>
         <View style={styles.box}>
