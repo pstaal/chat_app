@@ -29,7 +29,13 @@ export default class Chat extends React.Component {
         wrapperStyle={{
           right: {
             backgroundColor: '#000',
-            color: 'white'
+            color: 'white',
+            alignSelf: 'stretch',
+            marginLeft: 0,
+          },
+          left: {
+            alignSelf: 'stretch',
+            marginRight: 0,
           }
         }}
       />
