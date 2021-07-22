@@ -12,6 +12,21 @@ export default class Chat extends React.Component {
     this.state = {
       messages: [],
     };
+    
+      // Initialize Firebase
+      if (!firebase.apps.length) {
+        firebase.initializeApp({
+          apiKey: "AIzaSyBVQ9XCGuveRw-ke7k3Vjn_8yut6VIZa90",
+          authDomain: "test-cd62a.firebaseapp.com",
+          projectId: "test-cd62a",
+          storageBucket: "test-cd62a.appspot.com",
+          messagingSenderId: "738041402900",
+          appId: "1:738041402900:web:bdd4e7c6af8c5bb682b901",
+          measurementId: "G-M78B0CSS8L"
+        });
+      }
+
+    
   }
 
   onSend(messages = []) {
