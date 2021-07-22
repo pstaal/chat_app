@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Platform, KeyboardAvoidingView, StyleSheet } from 'react-native';
+import { View, Platform, KeyboardAvoidingView, StyleSheet, Text } from 'react-native';
 import { GiftedChat, Bubble } from 'react-native-gifted-chat'
 
 const firebase = require('firebase');
@@ -10,6 +10,7 @@ export default class Chat extends React.Component {
   constructor() {
     super();
     this.state = {
+      username: '',
       messages: [],
       uid: 0
     };
@@ -37,10 +38,15 @@ export default class Chat extends React.Component {
       // get the QueryDocumentSnapshot's data
       let data = doc.data();
       messages.push({
-        user: data.user,
-        text: data.text,
-        createdAt: data.createdAt
-      });
+          user: {
+            _id : data.user._id,
+            name: data.user.name,
+            avatar: data.user.avatar
+          },
+          text: data.text,
+          createdAt: new Date().toDateString(),
+          uid: data.uid,
+        });
     });
     this.setState({ 
       messages,
@@ -48,14 +54,13 @@ export default class Chat extends React.Component {
   }
 
   onSend(messages = []) {
-    this.setState(previousState => ({
-      messages: GiftedChat.append(previousState.messages, messages),
-    }));
     this.addMessage(messages);
   }
 
   renderBubble(props) {
     return (
+      <View>
+      <Text style={{color: '#fff'}}>{props.currentMessage.user.name}</Text>
       <Bubble
         {...props}
         wrapperStyle={{
@@ -71,19 +76,25 @@ export default class Chat extends React.Component {
           }
         }}
       />
+      </View>
     )
   }
 
   addMessage(messages) {
+    console.log(messages, 'inside add messages')
     this.referenceMessages.add({
-      user: messages.user,
-      text: messages.text,
-      createdAt: messages.createdAt,
+      user: {
+        _id : messages[0].user._id,
+        name: this.state.username,
+        avatar: 'https://placeimg.com/140/140/any'
+      },
+      text: messages[0].text,
+      createdAt: messages[0].createdAt,
       uid: this.state.uid,
     });
 
   }
-
+  
   componentDidMount() {
     let name = this.props.route.params.name;
     this.props.navigation.setOptions({ title: name });
@@ -92,12 +103,24 @@ export default class Chat extends React.Component {
         firebase.auth().signInAnonymously();
       }
       this.setState({
+        username: this.props.route.params.name,
         uid: user.uid,
-        messages: []
+        messages: [{
+          _id: 1,
+          text: 'Hello developer',
+          createdAt: new Date(),
+          user: {
+            _id: 1,
+            name: 'React Native',
+            avatar: 'https://placeimg.com/140/140/any',
+          }
+        }],
       });
       this.referenceMessageUser = firebase.firestore().collection('messages').where("uid", "==", this.state.uid);
+      console.log(this.referenceMessageUser, 'collection inside componentdidmount');
       // listen for collection changes for current user 
       this.unsubscribeListUser = this.referenceMessageUser.onSnapshot(this.onCollectionUpdate);
+      console.log(this.state, 'state inside componentDidmout');
 
     });
   }
@@ -109,39 +132,19 @@ export default class Chat extends React.Component {
       this.unsubscribeListUser();
     }
 
-    // this.setState({
-    //   messages: [
-    //     {
-    //       _id: 1,
-    //       text: `${name}! has just entered the chat.`,
-    //       createdAt: new Date(),
-    //       system: true,
-    //      },
-    //     {
-    //       _id: 2,
-    //       text: `Hello ${name}!`,
-    //       createdAt: new Date(),
-    //       user: {
-    //         _id: 2,
-    //         name: 'React Native',
-    //         avatar: 'https://placeimg.com/140/140/any',
-    //       },
-    //      },
-    //   ]
-    // });
-  // }
-
   render() {
     let color = this.props.route.params.color;
-    
+    console.log(this.state.messages, 'inside render');
 
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: color }}>
         <GiftedChat
           renderBubble={this.renderBubble.bind(this)}
+          showUserAvatar={true}
+          renderUsernameOnMessage={true}
           messages={this.state.messages}
           onSend={messages => this.onSend(messages)}
-          user={{_id: 1,}}
+          user={{_id: 1}}
         />
         { Platform.OS === 'android' ? <KeyboardAvoidingView behavior="height" /> : null}
       </View>
