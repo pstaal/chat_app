@@ -58,6 +58,7 @@ export default class Chat extends React.Component {
   }
 
   renderBubble(props) {
+    console.log(props, 'from inside renderbubble')
     return (
       <View>
       <Text style={{color: '#fff'}}>{props.currentMessage.user.name}</Text>
