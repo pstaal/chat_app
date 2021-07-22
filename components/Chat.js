@@ -93,13 +93,14 @@ export default class Chat extends React.Component {
       }
       this.setState({
         uid: user.uid,
-        messages: [],
+        messages: []
       });
       this.referenceMessageUser = firebase.firestore().collection('messages').where("uid", "==", this.state.uid);
       // listen for collection changes for current user 
       this.unsubscribeListUser = this.referenceMessageUser.onSnapshot(this.onCollectionUpdate);
 
     });
+  }
 
     componentWillUnmount() {
       // stop listening to authentication
@@ -128,7 +129,7 @@ export default class Chat extends React.Component {
     //      },
     //   ]
     // });
-  }
+  // }
 
   render() {
     let color = this.props.route.params.color;
