@@ -11,6 +11,7 @@ export default class Chat extends React.Component {
     super();
     this.state = {
       messages: [],
+      uid: 0
     };
     
       // Initialize Firebase
@@ -25,14 +26,32 @@ export default class Chat extends React.Component {
           measurementId: "G-M78B0CSS8L"
         });
       }
+      this.referenceMessages = firebase.firestore().collection('messages');
+   
+  }
 
-    
+  onCollectionUpdate = (querySnapshot) => {
+    const messages = [];
+    // go through each document
+    querySnapshot.forEach((doc) => {
+      // get the QueryDocumentSnapshot's data
+      let data = doc.data();
+      messages.push({
+        user: data.user,
+        text: data.text,
+        createdAt: data.createdAt
+      });
+    });
+    this.setState({ 
+      messages,
+   });
   }
 
   onSend(messages = []) {
     this.setState(previousState => ({
       messages: GiftedChat.append(previousState.messages, messages),
     }));
+    this.addMessage(messages);
   }
 
   renderBubble(props) {
@@ -55,29 +74,60 @@ export default class Chat extends React.Component {
     )
   }
 
+  addMessage(messages) {
+    this.referenceMessages.add({
+      user: messages.user,
+      text: messages.text,
+      createdAt: messages.createdAt,
+      uid: this.state.uid,
+    });
+
+  }
+
   componentDidMount() {
     let name = this.props.route.params.name;
     this.props.navigation.setOptions({ title: name });
-    this.setState({
-      messages: [
-        {
-          _id: 1,
-          text: `${name}! has just entered the chat.`,
-          createdAt: new Date(),
-          system: true,
-         },
-        {
-          _id: 2,
-          text: `Hello ${name}!`,
-          createdAt: new Date(),
-          user: {
-            _id: 2,
-            name: 'React Native',
-            avatar: 'https://placeimg.com/140/140/any',
-          },
-         },
-      ]
+    this.authUnsubscribe = firebase.auth().onAuthStateChanged((user) => {
+      if (!user) {
+        firebase.auth().signInAnonymously();
+      }
+      this.setState({
+        uid: user.uid,
+        messages: [],
+      });
+      this.referenceMessageUser = firebase.firestore().collection('messages').where("uid", "==", this.state.uid);
+      // listen for collection changes for current user 
+      this.unsubscribeListUser = this.referenceMessageUser.onSnapshot(this.onCollectionUpdate);
+
     });
+
+    componentWillUnmount() {
+      // stop listening to authentication
+      this.authUnsubscribe();
+      // stop listening for changes
+      this.unsubscribeListUser();
+    }
+
+    // this.setState({
+    //   messages: [
+    //     {
+    //       _id: 1,
+    //       text: `${name}! has just entered the chat.`,
+    //       createdAt: new Date(),
+    //       system: true,
+    //      },
+    //     {
+    //       _id: 2,
+    //       text: `Hello ${name}!`,
+    //       createdAt: new Date(),
+    //       user: {
+    //         _id: 2,
+    //         name: 'React Native',
+    //         avatar: 'https://placeimg.com/140/140/any',
+    //       },
+    //      },
+    //   ]
+    // });
   }
 
   render() {
