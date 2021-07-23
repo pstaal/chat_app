@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Platform, KeyboardAvoidingView, StyleSheet, Text } from 'react-native';
-import { GiftedChat, Bubble } from 'react-native-gifted-chat'
+import { GiftedChat, Bubble, InputToolbar} from 'react-native-gifted-chat'
 
 const firebase = require('firebase');
 require('firebase/firestore');
@@ -117,10 +117,10 @@ export default class Chat extends React.Component {
           }
         }],
       });
-      this.referenceMessageUser = firebase.firestore().collection('messages').where("uid", "==", this.state.uid);
+      this.referenceMessages = firebase.firestore().collection('messages');
       console.log(this.referenceMessageUser, 'collection inside componentdidmount');
       // listen for collection changes for current user 
-      this.unsubscribeListUser = this.referenceMessageUser.onSnapshot(this.onCollectionUpdate);
+      this.unsubscribeListUser = this.referenceMessages.onSnapshot(this.onCollectionUpdate);
       console.log(this.state, 'state inside componentDidmout');
 
     });
@@ -140,6 +140,12 @@ export default class Chat extends React.Component {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: color }}>
         <GiftedChat
+           renderInputToolbar={(props) => (
+          <InputToolbar
+            {...props}
+            style={{flex: '50%'}}
+          />
+        )}
           renderBubble={this.renderBubble.bind(this)}
           showUserAvatar={true}
           renderUsernameOnMessage={true}
