@@ -14,7 +14,8 @@ export default class Chat extends React.Component {
     this.state = {
       username: '',
       messages: [],
-      uid: 0
+      uid: 0, 
+      isOnline: false
     };
     
       // Initialize Firebase
@@ -134,34 +135,45 @@ export default class Chat extends React.Component {
     let name = this.props.route.params.name;
     this.props.navigation.setOptions({ title: name });
 
-    // get messages from asyncStorage
-    this.getMessages();
 
-    this.authUnsubscribe = firebase.auth().onAuthStateChanged((user) => {
-      if (!user) {
-        firebase.auth().signInAnonymously();
-      }
-      this.setState({
-        username: this.props.route.params.name,
-        uid: user.uid,
-        messages: [{
-          _id: 1,
-          text: 'Hello developer',
-          createdAt: new Date(),
-          user: {
-            _id: 1,
-            name: 'React Native',
-            avatar: 'https://placeimg.com/140/140/any',
+    NetInfo.fetch().then(connection => {
+      if (connection.isConnected) {
+        this.authUnsubscribe = firebase.auth().onAuthStateChanged((user) => {
+          if (!user) {
+            firebase.auth().signInAnonymously();
           }
-        }],
-      });
-      this.referenceMessages = firebase.firestore().collection('messages');
-      console.log(this.referenceMessageUser, 'collection inside componentdidmount');
-      // listen for collection changes for current user 
-      this.unsubscribeListUser = this.referenceMessages.onSnapshot(this.onCollectionUpdate);
-      console.log(this.state, 'state inside componentDidmout');
-
+          this.setState({
+            username: this.props.route.params.name,
+            uid: user.uid,
+            messages: [{
+              _id: 1,
+              text: 'Hello developer',
+              createdAt: new Date(),
+              user: {
+                _id: 1,
+                name: 'React Native',
+                avatar: 'https://placeimg.com/140/140/any',
+              }
+            }],
+            isOnline: true
+          });
+          this.referenceMessages = firebase.firestore().collection('messages');
+          console.log(this.referenceMessageUser, 'collection inside componentdidmount');
+          // listen for collection changes for current user 
+          this.unsubscribeListUser = this.referenceMessages.onSnapshot(this.onCollectionUpdate);
+          console.log(this.state, 'state inside componentDidmout');
+    
+        });
+        
+      } else {
+         // get messages from asyncStorage
+        this.getMessages();
+      }
     });
+
+   
+
+    
   }
 
     componentWillUnmount() {
