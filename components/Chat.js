@@ -134,7 +134,7 @@ export default class Chat extends React.Component {
   };
 
   renderInputToolbar(props) {
-    if (this.state.isConnected == false) {
+    if (this.state.isOnline === false) {
     } else {
      return (
       <InputToolbar
@@ -190,10 +190,12 @@ export default class Chat extends React.Component {
   }
 
     componentWillUnmount() {
+      if (this.state.isOnline) {
       // stop listening to authentication
       this.authUnsubscribe();
       // stop listening for changes
       this.unsubscribeListUser();
+      };
     }
 
   render() {
