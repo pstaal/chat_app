@@ -57,7 +57,9 @@ export default class Chat extends React.Component {
   }
 
   onSend(messages = []) {
+    if(this.state.isOnline) {
     this.addMessage(messages);
+    };
     //save message to asyncStorage
     this.saveMessages(messages);
   }
