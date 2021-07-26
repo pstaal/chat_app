@@ -132,6 +132,17 @@ export default class Chat extends React.Component {
       console.log(error.message);
     }
   };
+
+  renderInputToolbar(props) {
+    if (this.state.isConnected == false) {
+    } else {
+     return (
+      <InputToolbar
+        {...props}
+        />
+    );
+   }
+  };
   
   componentDidMount() {
     let name = this.props.route.params.name;
@@ -192,12 +203,7 @@ export default class Chat extends React.Component {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: color }}>
         <GiftedChat
-           renderInputToolbar={(props) => (
-          <InputToolbar
-            {...props}
-            style={{flex: '50%'}}
-          />
-        )}
+          renderInputToolbar = {this.renderInputToolbar}
           renderBubble={this.renderBubble.bind(this)}
           showUserAvatar={true}
           renderUsernameOnMessage={true}
