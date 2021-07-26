@@ -55,6 +55,26 @@ export default class Chat extends React.Component {
 
   onSend(messages = []) {
     this.addMessage(messages);
+    //save message to asyncStorage
+    this.saveMessages(messages);
+  }
+
+   //function to save message
+   async saveMessages(message) {
+    let messages = '';
+    let temp = [];
+    try {
+      messages = await AsyncStorage.getItem('messages') || '';
+      temp = JSON.parse(messages);
+    } catch (error) {
+      console.log(error.message);
+    }
+      temp = [...temp, message];
+    try {
+      await AsyncStorage.setItem('messages', JSON.stringify(temp));
+    } catch (error) {
+      console.log(error.message);
+    }
   }
 
   renderBubble(props) {
@@ -100,7 +120,7 @@ export default class Chat extends React.Component {
   async getMessages() {
     let messages = '';
     try {
-      messages = await AsyncStorage.getItem('messages') || [];
+      messages = await AsyncStorage.getItem('messages') || '';
       this.setState({
         messages: JSON.parse(messages)
       });
