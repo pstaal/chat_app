@@ -133,7 +133,7 @@ export default class Chat extends React.Component {
     }
   };
 
-  renderInputToolbar(props) {
+  renderInputToolbar = (props) => {
     if (this.state.isOnline === false) {
     } else {
      return (
