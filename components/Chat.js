@@ -120,7 +120,7 @@ export default class Chat extends React.Component {
       this.referenceMessages = firebase.firestore().collection('messages');
       console.log(this.referenceMessageUser, 'collection inside componentdidmount');
       // listen for collection changes for current user 
-      this.unsubscribeListUser = this.referenceMessages.onSnapshot(this.onCollectionUpdate);
+      this.unsubscribeListUser = this.referenceMessages.orderBy("createdAt", "desc").onSnapshot(this.onCollectionUpdate);
       console.log(this.state, 'state inside componentDidmout');
 
     });
