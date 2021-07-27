@@ -82,7 +82,6 @@ export default class Chat extends React.Component {
   }
 
   addMessage(messages) {
-    console.log(messages, 'inside add messages')
     this.referenceMessages.add({
       user: {
         _id : messages[0].user._id,
