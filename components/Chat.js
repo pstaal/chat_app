@@ -34,7 +34,7 @@ export default class Chat extends React.Component {
     // ]);
   }
 
-  async getMessages = () => {
+  async getMessages() {
     let messages = '';
     try {
       messages = await AsyncStorage.getItem('messages') || [];
