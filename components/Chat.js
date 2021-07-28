@@ -32,11 +32,12 @@ export default class Chat extends React.Component {
   componentDidMount() {
     let name = this.props.route.params.name;
     this.props.navigation.setOptions({ title: name });
+    
     this.authUnsubscribe = firebase.auth().onAuthStateChanged((user) => {
       if (!user) {
         firebase.auth().signInAnonymously();
       }
-      console.log(user, 'inside usercomponentdidmount++++++', user.uid);
+
       this.setState({
         // username: this.props.route.params.name,
         //set valid uuid because first mount has no user
@@ -85,7 +86,6 @@ export default class Chat extends React.Component {
   }
   // Should be arrow function, otherwise bind it
   onSend = (messages = []) => {
-    console.log(messages, 'messages inside onSend*****');
     this.setState(previousState => ({
       messages: GiftedChat.append(previousState, messages),
     }),
@@ -103,7 +103,6 @@ export default class Chat extends React.Component {
     });
   }
   renderBubble = (props) => {
-    console.log(props, 'from inside renderbubble')
     return (
       //This may not be required
       // <Text style={{ color: '#fff' }}>{props.currentMessage.user.name}</Text>
