@@ -39,7 +39,7 @@ export default class Chat extends React.Component {
     try {
       messages = await AsyncStorage.getItem('messages') || [];
       this.setState({
-        messages: JSON.parse(messages)
+        messages: (JSON.parse(messages))[1].messages
       });
     } catch (error) {
       console.log(error.message);
@@ -141,6 +141,7 @@ export default class Chat extends React.Component {
       () => {
         this.addMessage(messages[0]);
         this.saveMessages();
+        console.log(this.state.messages);
       })
   }
 
