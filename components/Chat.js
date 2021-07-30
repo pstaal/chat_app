@@ -28,43 +28,7 @@ export default class Chat extends React.Component {
       });
     }
     this.referenceMessages = firebase.firestore().collection('messages');
-    // // fix timer warning....you can ignore this for now
-    // LogBox.ignoreLogs([
-    //   'Setting a timer'
-    // ]);
   }
-
-  async getMessages() {
-    let messages = '';
-    try {
-      messages = await AsyncStorage.getItem('messages') || [];
-      this.setState({
-        messages: (JSON.parse(messages))[1].messages
-      });
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
-
-  async saveMessages() {
-    try {
-      await AsyncStorage.setItem('messages', JSON.stringify(this.state.messages));
-    } catch (error) {
-      console.log(error.message);
-    }
-  }
-
-  async deleteMessages() {
-    try {
-      await AsyncStorage.removeItem('messages');
-      this.setState({
-        messages: []
-      })
-    } catch (error) {
-      console.log(error.message);
-    }
-  }
-
 
 
   componentDidMount() {
@@ -79,8 +43,6 @@ export default class Chat extends React.Component {
           }
     
           this.setState({
-            // username: this.props.route.params.name,
-            //set valid uuid because first mount has no user
             uid: user.uid ? user.uid : 11,
             isConnected: true,
             messages: [{
@@ -94,10 +56,6 @@ export default class Chat extends React.Component {
               }
             }],
           });
-          //already initialised in constructor this.referenceMessages
-          // this.referenceMessages = firebase.firestore().collection('messages');
-          // console.log(this.referenceMessageUser, 'collection inside componentdidmount');
-          // listen for collection changes for current user 
           this.unsubscribeListUser = this.referenceMessages.orderBy("createdAt", "desc").onSnapshot(this.onCollectionUpdate);
         });
       } else {
@@ -124,8 +82,6 @@ export default class Chat extends React.Component {
         user: data.user,
         text: data.text,
         createdAt: data.createdAt.toDate(),
-        // not sure why you are passing uuid here, should be id
-        // uid: data.uid,
       });
     });
     this.setState({
@@ -133,15 +89,44 @@ export default class Chat extends React.Component {
     });
   }
 
-  // Should be arrow function, otherwise bind it
+  async getMessages() {
+    let messages = '';
+    try {
+      messages = await AsyncStorage.getItem('messages') || [];
+      this.setState({
+        messages: JSON.parse(messages)
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  async saveMessages() {
+    try {
+      await AsyncStorage.setItem('messages', JSON.stringify(this.state.messages));
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
+  async deleteMessages() {
+    try {
+      await AsyncStorage.removeItem('messages');
+      this.setState({
+        messages: []
+      })
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+  
   onSend = (messages = []) => {
     this.setState(previousState => ({
-      messages: GiftedChat.append(previousState, messages),
+      messages: GiftedChat.append(previousState.messages, messages),
     }),
       () => {
         this.addMessage(messages[0]);
         this.saveMessages();
-        console.log(this.state.messages);
       })
   }
 
@@ -157,8 +142,6 @@ export default class Chat extends React.Component {
 
   renderBubble = (props) => {
     return (
-      //This may not be required
-      // <Text style={{ color: '#fff' }}>{props.currentMessage.user.name}</Text>
       <Bubble
         {...props}
         wrapperStyle={{
@@ -206,11 +189,9 @@ export default class Chat extends React.Component {
           renderAvatarOnTop={true}
           messages={this.state.messages}
           onSend={messages => this.onSend(messages)}
-          //user must be set automatically not manually
           user={{
             _id: this.state.uid,
             name: username,
-            //you can add avatart
             avatar: 'https://placeimg.com/140/140/any'
           }}
         />
