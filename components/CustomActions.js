@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
 
@@ -66,6 +67,10 @@ export default class CustomActions extends React.Component {
       textAlign: 'center',
     },
    });
+
+   CustomActions.contextTypes = {
+    actionSheet: PropTypes.func,
+   };
 
 
 
