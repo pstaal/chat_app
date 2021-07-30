@@ -3,6 +3,7 @@ import { View, Platform, KeyboardAvoidingView, StyleSheet, Text, LogBox } from '
 import { GiftedChat, Bubble, InputToolbar } from 'react-native-gifted-chat'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import NetInfo from '@react-native-community/netinfo';
+import CustomActions from './CustomActions';
 
 const firebase = require('firebase');
 require('firebase/firestore');
@@ -168,7 +169,11 @@ export default class Chat extends React.Component {
       );
     }
   }
+  
 
+  renderCustomActions = (props) => {
+    return <CustomActions {...props} />;
+  };
 
   render() {
     let color = this.props.route.params.color;
@@ -184,6 +189,7 @@ export default class Chat extends React.Component {
           )}
           renderBubble={this.renderBubble}
           renderInputToolbar={this.renderInputToolbar}
+          renderActions={this.renderCustomActions}
           showUserAvatar={true}
           renderUsernameOnMessage={true}
           renderAvatarOnTop={true}
