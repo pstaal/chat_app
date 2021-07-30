@@ -43,6 +43,8 @@ export default class CustomActions extends React.Component {
     );
   }
 
+};
+
   const styles = StyleSheet.create({
     container: {
       width: 26,
@@ -66,4 +68,4 @@ export default class CustomActions extends React.Component {
    });
 
 
-};
+
