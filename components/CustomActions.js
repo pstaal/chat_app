@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, TouchableOpacity, Text } from 'react-native';
+import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
 
 
 export default class CustomActions extends React.Component {
