@@ -9,7 +9,62 @@ export default class CustomActions extends React.Component {
  
   constructor() {
     super();
+    this.state = {image: null};
     };
+
+    pickImage = async () => {
+      const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+   
+      if(status === 'granted') {
+        let result = await ImagePicker.launchImageLibraryAsync({
+          mediaTypes: 'Images',
+        }).catch(error => console.log(error));
+   
+        if (!result.cancelled) {
+          const imageUrl = await this.uploadImageFetch(result.uri);
+          this.props.onSend({ image: imageUrl });
+        }
+   
+      }
+    }
+
+    takePhoto = async () => {
+      const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL, Permissions.CAMERA);
+      if (status === 'granted') {
+        let result = await ImagePicker.launchCameraAsync().catch(error => console.log(error));
+  
+        if (!result.cancelled) {
+          const imageUrl = await this.uploadImageFetch(result.uri);
+          this.props.onSend({ image: imageUrl });
+        }
+      }
+    }
+
+    uploadImageFetch = async(uri) => {
+      const blob = await new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.onload = function() {
+          resolve(xhr.response);
+        };
+        xhr.onerror = function(e) {
+          console.log(e);
+          reject(new TypeError('Network request failed'));
+        };
+        xhr.responseType = 'blob';
+        xhr.open('GET', uri, true);
+        xhr.send(null);
+      });
+      const imageNameBefore = uri.split("/");
+      const imageName = imageNameBefore[imageNameBefore.length - 1];
+
+      const ref = firebase.storage().ref().child(`images/${imageName}`);
+
+      const snapshot = await ref.put(blob);
+
+      blob.close();
+
+      return await snapshot.ref.getDownloadURL();
+   };
 
   
     onActionPress = () => {
@@ -23,10 +78,10 @@ export default class CustomActions extends React.Component {
         async (buttonIndex) => {
           switch (buttonIndex) {
             case 0:
-              console.log('user wants to pick an image');
+              return this.pickImage();
               return;
             case 1:
-              console.log('user wants to take a photo');
+              return this.takePhoto();
               return;
             case 2:
               console.log('user wants to get their location');
@@ -35,6 +90,7 @@ export default class CustomActions extends React.Component {
         },
       );
     };
+  
 
   render() {
     return (
