@@ -68,6 +68,30 @@ export default class CustomActions extends React.Component {
       return await snapshot.ref.getDownloadURL();
    };
 
+
+   getLocation = async () => {
+    try {
+      const { status } = await Permissions.askAsync(Permissions.LOCATION);
+      if (status === "granted") {
+        const result = await Location.getCurrentPositionAsync(
+          {}
+        ).catch((error) => console.log(error));
+        const longitude = JSON.stringify(result.coords.longitude);
+        const altitude = JSON.stringify(result.coords.latitude);
+        if (result) {
+          this.props.onSend({
+            location: {
+              longitude: result.coords.longitude,
+              latitude: result.coords.latitude,
+            },
+          });
+        }
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
   
     onActionPress = () => {
       const options = ['Choose From Library', 'Take Picture', 'Send Location', 'Cancel'];
@@ -86,7 +110,7 @@ export default class CustomActions extends React.Component {
               return this.takePhoto();
               return;
             case 2:
-              console.log('user wants to get their location');
+              return this.getLocation();
             default:
           }
         },
