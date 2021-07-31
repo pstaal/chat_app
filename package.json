@@ -16,6 +16,7 @@
     "@react-navigation/stack": "^5.14.5",
     "expo": "~42.0.1",
     "expo-image-picker": "~10.2.2",
+    "expo-location": "~12.1.2",
     "expo-permissions": "~12.1.1",
     "expo-status-bar": "~1.0.4",
     "firebase": "^7.9.0",
@@ -28,7 +29,8 @@
     "react-native-safe-area-context": "3.2.0",
     "react-native-screens": "~3.4.0",
     "react-native-svg": "^12.1.1",
-    "react-native-web": "~0.13.12"
+    "react-native-web": "~0.13.12",
+    "react-native-maps": "0.28.0"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0"
