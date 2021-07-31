@@ -138,8 +138,8 @@ export default class Chat extends React.Component {
       text: messages.text,
       createdAt: messages.createdAt,
       user: messages.user,
-      image: message.image || null,
-      location: message.location || null
+      image: messages.image || null,
+      location: messages.location || null
     });
   }
 
