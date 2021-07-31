@@ -135,7 +135,7 @@ export default class Chat extends React.Component {
   addMessage = (messages) => {
     this.referenceMessages.add({
       _id: messages._id,
-      text: messages.text,
+      text: messages.text || "",
       createdAt: messages.createdAt,
       user: messages.user,
       image: messages.image || null,
