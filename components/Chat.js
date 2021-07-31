@@ -81,8 +81,10 @@ export default class Chat extends React.Component {
       messages.push({
         _id: data._id,
         user: data.user,
-        text: data.text,
+        text: data.text || "",
         createdAt: data.createdAt.toDate(),
+        image: data.image || null,
+        location: data.location || null
       });
     });
     this.setState({
