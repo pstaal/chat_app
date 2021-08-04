@@ -38,11 +38,12 @@ export default class Chat extends React.Component {
     this.props.navigation.setOptions({ title: name });
 
     NetInfo.fetch().then(connection => {
-      if (connection.isConnected) {
+      console.log('-----here i am!',connection)
+      // if (connection.isConnected) {
         this.authUnsubscribe = firebase.auth().onAuthStateChanged((user) => {
           if (!user) {
             firebase.auth().signInAnonymously();
-          }
+           }
     
           this.setState({
             uid: user.uid ? user.uid : 11,
@@ -60,9 +61,9 @@ export default class Chat extends React.Component {
           });
           this.unsubscribeListUser = this.referenceMessages.orderBy("createdAt", "desc").onSnapshot(this.onCollectionUpdate);
         });
-      } else {
-        this.getMessages();
-      }
+      // } else {
+      //   this.getMessages();
+      // }
     });
   }
 
